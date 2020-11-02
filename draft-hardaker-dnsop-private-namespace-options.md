@@ -29,6 +29,8 @@ zone.
 
 # Introduction
 
+HATS: The author is not wearing any hats while writing this document.
+
 Deployed DNS clients within the Internet typically communicate with
 upstream resolvers using their own in-application stub resolver.
 These upstream resolvers may be run by ISPs, or may be
@@ -111,7 +113,9 @@ namespace TLD exists that is:
 2. Is an unsigned delegation within the (GID's) DNS root, with NS
    records likely pointing eventually to something like 127.0.53.53.
    In this document, we refer to this as ".zz" following convention in
-   [draft-ietf-dnsop-private-use-tld].
+   [draft-ietf-dnsop-private-use-tld].  We note that
+   [draft-ietf-dnsop-alt-tld] also proposed a private namespace
+   (".alt") that also fits into this category.
    
 This document recognizes that .zz itself is actually not necessarily a
 normal special use domain, and {{?RFC6761}} may not apply as its an

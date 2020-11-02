@@ -59,6 +59,12 @@ potential choices for a private-use TLD (also see {{?RFC8244}} bullet
 resolution path DNSSEC validation is in use, potentially at an
 end-device (phone, laptop, etc), a CPE, or at an ISP's resolver.
 
+## Requirements notation
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in {{?RFC2119}}
+
 # Analysis of choices
 
 ## Assumptions
@@ -98,12 +104,18 @@ namespace TLD exists that is:
    In this document, we refer to this as ".zz" following convention in
    [draft-ietf-dnsop-private-use-tld].
    
+This document recognizes that .zz itself is actually not necessarily a
+normal special use domain, and {{?RFC6761}} may not apply as its an
+ISO reversed name.  However, in other aspects it will behave like a
+special-use registered domain and its under current consideration by
+dnsop so we leave it in here as the example name.
+   
 In summary:
 
 - .internal is an unsigned TLD
-- .zz is a special-use like TLD that MUST never be assigned
+- .zz is a special-use-like TLD that MUST never be assigned
 
-### Analysis of an unsigned TLD (aka .internal)
+### Analysis of an unsigned TLD (aka .internal) {#unsigned}
 
 An unsigned TLD such as .internal will:
 
@@ -115,7 +127,9 @@ An unsigned TLD such as .internal will:
 - inside the private network will:
     - Believe the upstream resolver's responses
 - outside the private network will:
-    - Believe the upstream resolver's NXDOMAIN responses
+    - Believe the upstream resolver's NXDOMAIN responses for anything
+      deeper than .internal itself (IE, api.example.internal/A will
+      return NXDOMAIN) 
 
 #### validating end-devices querying within .internal will:
 
@@ -131,30 +145,100 @@ An unsigned TLD such as .internal will:
     - if configured with a TA, all answers will be detected as
       BOGUS
 
-### Analysis of a special-use TLD (aka .zz)
+### Analysis of a special-use TLD (aka .zz) {#specialuse}
 
 A special-use TLD will:
 
 - Not exist within the DNS root
 - Proven by the root's NSEC chain
 
+#### non-validating end-devices querying within .zz will:
 
+- inside the private network will:
+    - Believe the upstream resolver's responses
+- outside the private network will:
+    - Believe the upstream resolver's NXDOMAIN for all
+
+#### validating end-devices querying within .zz will:
+
+- inside the private network will:
+    - with an upstream resolver
+    - self-resolving:
+        - needs a configured TA or a configured negative trust anchor
+        - possibly automatically obtained configuration with a
+          bootstrapping mechanism, or-preconfigured in a ROM image
+
+- outside the private network will:
+    - if not configured with a TA, all answers to .internal will
+      either be NXDOMAIN or spoofable
+    - if configured with a TA, all answers will be detected as BOGUS
+
+# Other considerations
+
+## a unsigned delegated domain - .internal
+
+- configuration of new TAs
+- requires collaboration between the IETF and ICANN , since the TLD
+  will exist and falls outside the scope of {{?RFC6761}}.  This
+  process can be slow.
+
+## a special-use domain - .zz
+
+- May require invoking {{?RFC6761}} (depending on .zz or not .zz)
+
+# Deployment considerations
+
+During initial deployment of either of these, there is a fundamental
+difference for validating resolvers.
+
+Specifically, until all validating resolvers are updated with a new TA
+for specific instances under a special-use TLD (e.g. .zz), the
+resolvers will fail to validate any names underneath as .zz is
+provable insecure.  This could take a while to update all deployed
+validating resolvers.
+
+On the other hand, deploying a newly allocated, unsigned TLD will
+take a long time in process both within the IETF and within ICANN.
+
+And each may have impacts on what error processing results, based on
+the differing resolution characteristics ([unsigned], [specialuse]).
 
 # Recommendation
 
-## Requirements notation
+This author recommends that the IETF take on both tracks
+simultaneously, and:
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in {{?RFC2119}}
+1. starts the process of communicating with ICANN and ISO about the
+   use of .zz, or selects another name to use under {{?RFC6761}} as a
+   special-use name.
+1. Issues a request to the ICANN board via the IAB to follow the
+   guidance of [SSAC113] and reserve a string or set of strings for
+   use as a private-namespace(s) as an unsigned TLD.  The ICANN board
+   can not act on their own, based on ICANN bilaws, but can take
+   requests from the IETF via the IAB to act.
+   
+This leaves vendors the freedom to chose that path that best meets
+their specific requirements.  Recommendations about how to best select
+one given their situation is hinted above, but should be more formally
+written down in this document or others. 
+   
+## Selecting good TLD names
 
-# Contrasting Proposals {#anothersection}
+Unfortunately, here be dragons.  Selecting a good name has been
+discussed multiple times in the IETF, and has always resulted in a
+lack of consensus.  In part, this is because the IETF doesn't have the
+skillsets needed to hold a discussion about what language element(s)
+would be best for universal adoption and usage.
 
-# Differences in security fundamentals
+Instead, this author recommends that we direct ICANN to select the
+names that should be used for both of these cases.  ICANN has
+significant more skill breadth in the area of selecting names best
+suited to be understood by end-users.  This discussion will not be
+faster, however, within ICANN but this author believes a resolution in
+that SDO will be more likely successful.
 
-~~~
-TLD1 86400 IN NS 127.0.0.1
-~~~
+Thus, the IETF can make the technical recommendation and ICANN can
+implement these two choices.
 
 # Security Considerations
 

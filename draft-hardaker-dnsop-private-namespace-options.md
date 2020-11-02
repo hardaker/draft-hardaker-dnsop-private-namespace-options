@@ -201,7 +201,7 @@ On the other hand, deploying a newly allocated, unsigned TLD will
 take a long time in process both within the IETF and within ICANN.
 
 And each may have impacts on what error processing results, based on
-the differing resolution characteristics ([unsigned], [specialuse]).
+the differing resolution characteristics ({{unsigned}}, {{specialuse}}).
 
 # Recommendation
 
@@ -242,7 +242,7 @@ implement these two choices.
 
 # Security Considerations
 
-[TBD]
+TBD
 
 # IANA Considerations
 

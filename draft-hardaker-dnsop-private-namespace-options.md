@@ -59,6 +59,12 @@ potential choices for a private-use TLD (also see {{?RFC8244}} bullet
 resolution path DNSSEC validation is in use, potentially at an
 end-device (phone, laptop, etc), a CPE, or at an ISP's resolver.
 
+## Document state
+
+This document is not a fully complete analysis, but rather a starting
+point for discussion and continued analysis by both the author and
+others that wish to contribute.
+
 ## Requirements notation
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -66,6 +72,9 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 document are to be interpreted as described in {{?RFC2119}}
 
 # Analysis of choices
+
+Note that this analysis is not (yet) exhaustive.  It does describe
+some of the differences in the two approaches.
 
 ## Assumptions
 
@@ -115,7 +124,13 @@ In summary:
 - .internal is an unsigned TLD
 - .zz is a special-use-like TLD that MUST never be assigned
 
-### Analysis of an unsigned TLD (aka .internal) {#unsigned}
+### Working state aside
+
+The next two sections mix together DNSSEC validation at end-devices
+and resolvers; it would add significant more clarity to discuss them
+individually, which will be done in a future version.
+
+### Analysis of an unsigned TLD (eg .internal) {#unsigned}
 
 An unsigned TLD such as .internal will:
 
@@ -124,28 +139,28 @@ An unsigned TLD such as .internal will:
 
 #### non-validating end-devices querying within .internal will:
 
-- inside the private network will:
+- inside the private network the client will:
     - Believe the upstream resolver's responses
-- outside the private network will:
+- outside the private network the client will:
     - Believe the upstream resolver's NXDOMAIN responses for anything
       deeper than .internal itself (IE, api.example.internal/A will
       return NXDOMAIN) 
 
 #### validating end-devices querying within .internal will:
 
-- inside the private network will:
+- inside the private network the client will:
     - must be configured with a private TA to enable DNSSEC within
       the private network (creating an island of trust)
     - If unconfigured, it will believe the upstream resolver's
       responses because its delegated insecure, and therefore has
       no basis to distrust the answers
-- outside the private network will:
+- outside the private network the client will:
     - if not configured with a TA, all answers to .internal will
       either be NXDOMAIN or spoofable
     - if configured with a TA, all answers will be detected as
       BOGUS
 
-### Analysis of a special-use TLD (aka .zz) {#specialuse}
+### Analysis of a special-use TLD (eg .zz) {#specialuse}
 
 A special-use TLD will:
 
@@ -154,26 +169,30 @@ A special-use TLD will:
 
 #### non-validating end-devices querying within .zz will:
 
-- inside the private network will:
+- inside the private network the client will:
     - Believe the upstream resolver's responses
-- outside the private network will:
-    - Believe the upstream resolver's NXDOMAIN for all
+- outside the private network the client will:
+    - Believe the upstream resolver's NXDOMAIN or spoofed answers for
+      all data within the .zz domain.
 
 #### validating end-devices querying within .zz will:
 
-- inside the private network will:
+- inside the private network the client will:
     - with an upstream resolver
     - self-resolving:
         - needs a configured TA or a configured negative trust anchor
         - possibly automatically obtained configuration with a
           bootstrapping mechanism, or-preconfigured in a ROM image
 
-- outside the private network will:
+- outside the private network the client will:
     - if not configured with a TA, all answers to .internal will
       either be NXDOMAIN or spoofable
     - if configured with a TA, all answers will be detected as BOGUS
 
+
 # Other considerations
+
+
 
 ## a unsigned delegated domain - .internal
 
@@ -185,6 +204,7 @@ A special-use TLD will:
 ## a special-use domain - .zz
 
 - May require invoking {{?RFC6761}} (depending on .zz or not .zz)
+- may require more configuration per-device
 
 # Deployment considerations
 
@@ -243,6 +263,8 @@ implement these two choices.
 # Security Considerations
 
 TBD
+
+(though much of this draft is a security considerations itself)
 
 # IANA Considerations
 

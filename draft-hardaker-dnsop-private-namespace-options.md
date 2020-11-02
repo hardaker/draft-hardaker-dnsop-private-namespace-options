@@ -16,8 +16,11 @@ author:
     email: ietf@hardakers.net
 
 normative:
- 
+  RFC2119:
+  RFC6761:
+
 informative:
+  RFC8244:
 
 --- abstract
 
@@ -49,7 +52,7 @@ customer never providing one.  This document makes no judgment on
 whether this is right or wrong, and takes this assumption as simply
 the state of the current world.
 
-The for special use names is well spelled out in {{?RFC6761}}.
+The for special use names is well spelled out in {{RFC6761}}.
 {{?RFC8244}} provides additional insight into areas that are still
 under discussion and where work is needed.  Recently ICANN's SSAC has
 issued [SAC113] entitled "SSAC Advisory on Private-Use TLDs", wherein
@@ -69,9 +72,11 @@ others that wish to contribute.
 
 ## Requirements notation
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in {{?RFC2119}}
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY",
+   and "OPTIONAL" in this document are to be interpreted as described
+   in BCP 14 {{RFC2119}} {{?RFC8174}} when, and only when, they appear
+   in all capitals, as shown here.
 
 # Analysis of choices
 
@@ -106,7 +111,7 @@ We make the following assumptions to begin:
 Given these assumptions, we consider the cases where a private
 namespace TLD exists that is:
 
-1. Is a special-use domain per {{?RFC6761}}, and does not (and will
+1. Is a special-use domain per {{RFC6761}}, and does not (and will
    never) exist in the GID.  In this document, we refer to this as
    ".internal" for discussion purposes only following conventions in
    [draft-wkumari-dnsop-internal].
@@ -118,7 +123,7 @@ namespace TLD exists that is:
    (".alt") that also fits into this category.
    
 This document recognizes that .zz itself is actually not necessarily a
-normal special use domain, and {{?RFC6761}} may not apply as its an
+normal special use domain, and {{RFC6761}} may not apply as its an
 ISO reversed name.  However, in other aspects it will behave like a
 special-use registered domain and its under current consideration by
 dnsop so we leave it in here as the example name.
@@ -202,12 +207,12 @@ A special-use TLD will:
 
 - configuration of new TAs
 - requires collaboration between the IETF and ICANN , since the TLD
-  will exist and falls outside the scope of {{?RFC6761}}.  This
+  will exist and falls outside the scope of {{RFC6761}}.  This
   process can be slow.
 
 ## a special-use domain - .zz
 
-- May require invoking {{?RFC6761}} (depending on .zz or not .zz)
+- May require invoking {{RFC6761}} (depending on .zz or not .zz)
 - may require more configuration per-device
 
 # Deployment considerations
@@ -233,10 +238,10 @@ This author recommends that the IETF take on both tracks
 simultaneously, and:
 
 1. starts the process of communicating with ICANN and ISO about the
-   use of .zz, or selects another name to use under {{?RFC6761}} as a
+   use of .zz, or selects another name to use under {{RFC6761}} as a
    special-use name.
 1. Issues a request to the ICANN board via the IAB to follow the
-   guidance of [SSAC113] and reserve a string or set of strings for
+   guidance of [SAC113] and reserve a string or set of strings for
    use as a private-namespace(s) as an unsigned TLD.  The ICANN board
    can not act on their own, based on ICANN bilaws, but can take
    requests from the IETF via the IAB to act.
@@ -272,6 +277,7 @@ TBD
 
 # IANA Considerations
 
+TBD
 
 --- back
 

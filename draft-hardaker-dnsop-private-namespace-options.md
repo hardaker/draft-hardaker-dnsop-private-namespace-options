@@ -112,15 +112,16 @@ Given these assumptions, we consider the cases where a private
 namespace TLD exists that is:
 
 1. Is a special-use domain per {{RFC6761}}, and does not (and will
-   never) exist in the GID.  In this document, we refer to this as
-   ".internal" for discussion purposes only following conventions in
-   [draft-wkumari-dnsop-internal].
-2. Is an unsigned delegation within the (GID's) DNS root, with NS
-   records likely pointing eventually to something like 127.0.53.53.
+   never) exist in the GID.  
    In this document, we refer to this as ".zz" following convention in
    [draft-ietf-dnsop-private-use-tld].  We note that
    [draft-ietf-dnsop-alt-tld] also proposed a private namespace
    (".alt") that also fits into this category.
+2. Is an unsigned delegation within the (GID's) DNS root, with NS
+   records likely pointing eventually to something like 127.0.53.53.
+   In this document, we refer to this as
+   ".internal" for discussion purposes only following conventions in
+   [draft-wkumari-dnsop-internal].
    
 This document recognizes that .zz itself is actually not necessarily a
 normal special use domain, and {{RFC6761}} may not apply as its an
